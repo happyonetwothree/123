@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - 数字展销平台-春韵</title>
+    <link rel="stylesheet" href="css/lab3-2501-004-index.css">
+    <style>
+        /* 注册表单专属样式 */
+        .register-container {
+            width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .form-item {
+            margin-bottom: 15px;
+        }
+        .form-item label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-item input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #27ae60;
+        }
+        .tips {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .tips a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .msg {
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .success-msg {
+            color: green;
+        }
+        .error-msg {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="img\198812222a1ee4ef6f21926d90d37df6.jpg" alt="网站Logo" width="120">
+        </div>
+        <nav class="nav">
+            <ul>
+                <li><a href="lab3-2501-004-index.html">首页</a></li>
+                <li><a href="#">图书分类</a></li>
+                <li><a href="#">热门推荐</a></li>
+                <li><a href="#">新书上市</a></li>
+                <li><a href="#">联系我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="register-container">
+        <h2>用户注册</h2>
+        <div class="msg success-msg" id="registerSuccess">注册成功！即将跳转到登录页...</div>
+        <div class="msg error-msg" id="registerError">用户名已存在，请更换！</div>
+        <form id="registerForm">
+            <div class="form-item">
+                <label for="regUsername">用户名</label>
+                <input type="text" id="regUsername" name="regUsername" required placeholder="请设置用户名">
+            </div>
+            <div class="form-item">
+                <label for="regPassword">密码</label>
+                <input type="password" id="regPassword" name="regPassword" required placeholder="请设置密码（6位以上）" minlength="6">
+            </div>
+            <div class="form-item">
+                <label for="confirmPwd">确认密码</label>
+                <input type="password" id="confirmPwd" name="confirmPwd" required placeholder="请再次输入密码">
+            </div>
+            <button type="submit" class="btn">注册</button>
+        </form>
+        <div class="tips">
+            已有账号？<a href="lab3-2501-004-login.html">立即登录</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 数字展销平台-春韵 | 版权所有</p>
+    </footer>
+
+    <script>
+        // 注册逻辑
+        const registerForm = document.getElementById('registerForm');
+        const registerSuccess = document.getElementById('registerSuccess');
+        const registerError = document.getElementById('registerError');
+
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // 阻止表单默认提交
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPwd = document.getElementById('confirmPwd').value;
+
+            // 密码一致性校验
+            if (password !== confirmPwd) {
+                alert('两次输入的密码不一致！');
+                return;
+            }
+
+            // 从localStorage获取已有用户，若无则初始化空数组
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            // 检查用户名是否已存在
+            const isExist = users.some(u => u.username === username);
+
+            if (isExist) {
+                // 用户名已存在
+                registerError.style.display = 'block';
+                setTimeout(() => {
+                    registerError.style.display = 'none';
+                }, 3000);
+            } else {
+                // 注册成功：存储用户信息
+                users.push({ username, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                registerSuccess.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'lab3-2501-004-login.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
